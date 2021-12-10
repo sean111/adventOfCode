@@ -1,20 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
-type Fish struct {
-	age int
-}
-
-var school []Fish
-
 func main() {
+	var age [9]int
 	data, err := os.ReadFile("data.txt")
 	if err != nil {
 		log.Fatalln(err)
@@ -24,7 +18,7 @@ func main() {
 
 	for _, val := range initialState {
 		life, _ := strconv.Atoi(val)
-		school = append(school, Fish{age: life})
+		age[life]++
 	}
 
 	maxDays := 256
@@ -33,26 +27,20 @@ func main() {
 	//debugDay(0)
 
 	for day <= maxDays {
-		for i, _ := range school {
-			fish := school[i]
-			if fish.age == 0 {
-				fish.age = 6
-				school = append(school, Fish{age: 8})
-			} else {
-				fish.age--
-			}
-			school[i] = fish
+		var tmpAge [9]int
+		for i := 1; i < 9; i++ {
+			tmpAge[i-1] = age[i]
 		}
-		//debugDay(day)
+		tmpAge[8] += age[0]
+		tmpAge[6] += age[0]
+		age = tmpAge
 		day++
 	}
-	log.Printf("Total Fish: %d", len(school))
-}
 
-func debugDay(day int) {
-	fmt.Printf("Day %d:     ", day)
-	for _, fish := range school {
-		fmt.Printf("%d, ", fish.age)
+	total := 0
+	for _, cnt := range age {
+		total += cnt
 	}
-	fmt.Println("")
+
+	log.Printf("Total Fish: %d\n", total)
 }
