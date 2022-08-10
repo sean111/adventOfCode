@@ -11,7 +11,7 @@ import (
 func main() {
 	totalSurface := 0
 	totalRibbon := 0
-	data, err := os.Open("test	.txt")
+	data, err := os.Open("data.txt")
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -28,7 +28,7 @@ func main() {
 		whVal := width * height
 		hlVal := height * length
 		surface := 2*lwVal + 2*whVal + 2*hlVal + min(lwVal, whVal, hlVal)
-		ribbon := 0
+		ribbon := findSmallestFace(length, width, height) + (length * width * height)
 		totalRibbon += ribbon
 		log.Printf("%s => %d (surface) => %d (ribbon)\n", line, surface, ribbon)
 		totalSurface += surface
@@ -44,4 +44,11 @@ func min(values ...int) int {
 		}
 	}
 	return min
+}
+
+func findSmallestFace(length int, height int, width int) int {
+	lwPerimeter := length + length + width + width
+	whPerimeter := width + width + height + height
+	hlPermimter := height + height + length + length
+	return min(lwPerimeter, whPerimeter, hlPermimter)
 }
