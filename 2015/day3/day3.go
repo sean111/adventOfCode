@@ -14,7 +14,11 @@ type Coords struct {
 	y int
 }
 
+var santaCoords Coords
+var roboSantaCoords Coords
 var coords Coords
+
+var moover int8 = 0 // 0 = Santa, 1 = RoboSanta
 
 func main() {
 	data, err := os.Open("data.txt")
@@ -41,21 +45,35 @@ func main() {
 		}
 
 		// log.Printf("%s", string(direction))
+		if moover == 0 {
+			coords = santaCoords
+		} else {
+			coords = roboSantaCoords
+		}
+
 		switch string(direction) {
 		case ">":
-			move(coords.x+1, coords.y)
+			coords = move(coords.x+1, coords.y)
 		case "<":
-			move(coords.x-1, coords.y)
+			coords = move(coords.x-1, coords.y)
 		case "^":
-			move(coords.x, coords.y+1)
+			coords = move(coords.x, coords.y+1)
 		case "v":
-			move(coords.x, coords.y-1)
+			coords = move(coords.x, coords.y-1)
+		}
+
+		if moover == 0 {
+			moover = 1
+			santaCoords = coords
+		} else {
+			moover = 0
+			roboSantaCoords = coords
 		}
 	}
 	log.Printf("Houses: %d", houses)
 }
 
-func move(x int, y int) {
+func move(x int, y int) Coords {
 	_, ok := houseMap[x][y]
 	if !ok {
 		if len(houseMap[x]) > 0 {
@@ -72,6 +90,5 @@ func move(x int, y int) {
 	// log.Printf("%v\n", ok)
 	// log.Printf("x: %d, y: %d, testVal: %d\n", x, y, testVal)
 	// log.Printf("map: %v\n", houseMap)
-	coords.x = x
-	coords.y = y
+	return Coords{x: x, y: y}
 }
