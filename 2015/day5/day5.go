@@ -8,9 +8,6 @@ import (
 	"strings"
 )
 
-var badStrings = [4]string{"ab", "cd", "pq", "xy"}
-var vowels = [5]string{"a", "e", "i", "o", "u"}
-
 func main() {
 	var goodStrings int = 0
 	data, err := os.Open("data.txt")
@@ -23,21 +20,15 @@ func main() {
 
 	for scanner.Scan() {
 		inputString := scanner.Text()
-		log.Printf("String: %s", inputString)
-		vowelCount := getVowlCount(inputString)
-		log.Printf("\tVowels: %d", vowelCount)
-		if vowelCount < 3 {
-			log.Printf("\tFailed vowel count (%d)\n", vowelCount)
+		log.Printf("String: %s\n", inputString)
+
+		if !checkForPairs(inputString) {
+			log.Printf("\tFailed pair check\n")
 			continue
 		}
 
-		if !checkForDoubleLetter(inputString) {
-			log.Printf("\tFailed double letter check\n")
-			continue
-		}
-
-		if checkForBadStrings(inputString) {
-			log.Printf("\tFailed bad string check\n")
+		if !checkForPattern(inputString) {
+			log.Printf("\tFailed pattern check\n")
 			continue
 		}
 
@@ -46,26 +37,23 @@ func main() {
 	fmt.Printf("Good Strings: %d\n", goodStrings)
 }
 
-func getVowlCount(target string) int {
-	var total int = 0
-	for _, vowel := range vowels {
-		total += strings.Count(target, vowel)
-	}
-	return total
-}
-
-func checkForDoubleLetter(target string) bool {
-	for x := 'a'; x <= 'z'; x++ {
-		if strings.Contains(target, string(x)+string(x)) {
+func checkForPairs(target string) bool {
+	targetLen := len([]rune(target)) - 2
+	for x := 0; x <= targetLen; x++ {
+		//log.Printf("\t\tsubstr: %s\n", target[x:x+2])
+		fCount := strings.Count(target, target[x:x+2])
+		if fCount > 1 {
+			//log.Printf("\t\t%s => %d", target[x:x+2], fCount)
 			return true
 		}
 	}
 	return false
 }
 
-func checkForBadStrings(target string) bool {
-	for _, badString := range badStrings {
-		if strings.Contains(target, badString) {
+func checkForPattern(target string) bool {
+	targetLen := len([]rune(target)) - 3
+	for x := 0; x <= targetLen; x++ {
+		if target[x] == target[x+2] {
 			return true
 		}
 	}
