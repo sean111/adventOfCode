@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -23,8 +24,6 @@ var grid [1000][1000]int
 
 var lightsLit int
 
-var operations []Operation
-
 func main() {
 	data, err := os.Open("test.txt")
 	if err != nil {
@@ -34,8 +33,30 @@ func main() {
 
 	for scanner.Scan() {
 		command := scanner.Text()
-		commandParser(command)
+		operation := commandParser(command)
+		for x := operation.start.x; x <= operation.end.x; x++ {
+			for y := operation.start.y; y <= operation.end.y; y++ {
+				switch operation.command {
+				case "toggle":
+					if grid[x][y] == 1 {
+						lightsLit--
+						grid[x][y] = 0
+					} else {
+						lightsLit++
+						grid[x][y] = 1
+					}
+				case "on":
+					grid[x][y] = 1
+					lightsLit++
+				case "off":
+					grid[x][y] = 0
+					lightsLit--
+				}
+			}
+		}
 	}
+	outputGrid()
+	fmt.Printf("Lights Lit: %d\n", lightsLit)
 }
 
 func commandParser(line string) Operation {
@@ -75,4 +96,23 @@ func commandParser(line string) Operation {
 	}
 }
 
-func show
+func outputGrid() {
+	output, _ := os.Create("grid.txt")
+	writer := bufio.NewWriter(output)
+	xLen := len(grid)
+	yLen := len(grid[0])
+	for y := 0; y < yLen; y++ {
+		outputString := ""
+		for x := 0; x < xLen; x++ {
+			if x == xLen-1 {
+				outputString += fmt.Sprintf("\t%d\n", grid[x][y])
+			} else if x != 0 {
+				outputString += fmt.Sprintf("\t%d", grid[x][y])
+			} else {
+				outputString += fmt.Sprintf("%d", grid[x][y])
+			}
+		}
+		writer.WriteString(outputString)
+	}
+	writer.Flush()
+}
