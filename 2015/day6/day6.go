@@ -22,7 +22,7 @@ type Operation struct {
 
 var grid [1000][1000]int
 
-var lightsLit int
+var totalBrightness int
 
 func main() {
 	data, err := os.Open("data.txt")
@@ -38,31 +38,24 @@ func main() {
 			for y := operation.start.y; y <= operation.end.y; y++ {
 				switch operation.command {
 				case "toggle":
-					if grid[x][y] == 1 {
-						lightsLit--
-						grid[x][y] = 0
-					} else {
-						lightsLit++
-						grid[x][y] = 1
-					}
+					grid[x][y] = grid[x][y] + 2
+					totalBrightness = totalBrightness + 2
 				case "on":
-					if grid[x][y] == 0 {
-						lightsLit++
-					}
-					grid[x][y] = 1
+					grid[x][y]++
+					totalBrightness++
 				case "off":
-					if grid[x][y] == 1 {
-						lightsLit--
+					if grid[x][y] > 0 {
+						grid[x][y]--
+						totalBrightness--
 					}
-					grid[x][y] = 0
 				}
 			}
 		}
 	}
 	//outputGrid()
-	fmt.Printf("Lights Lit: %d\n", lightsLit)
-	check := totalLightsLit()
-	fmt.Printf("Lights Lit Check: %d\n", check)
+	fmt.Printf("Total Brightness: %d\n", totalBrightness)
+	check := checkTotalBrightness()
+	fmt.Printf("Check: %d\n", check)
 }
 
 func commandParser(line string) Operation {
@@ -123,7 +116,7 @@ func outputGrid() {
 	writer.Flush()
 }
 
-func totalLightsLit() int {
+func checkTotalLightsLit() int {
 	lights := 0
 	xLen := len(grid)
 	yLen := len(grid[0])
@@ -135,4 +128,16 @@ func totalLightsLit() int {
 		}
 	}
 	return lights
+}
+
+func checkTotalBrightness() int {
+	brightness := 0
+	xLen := len(grid)
+	yLen := len(grid[0])
+	for x := 0; x < xLen; x++ {
+		for y := 0; y < yLen; y++ {
+			brightness += grid[x][y]
+		}
+	}
+	return brightness
 }
