@@ -25,7 +25,7 @@ var grid [1000][1000]int
 var lightsLit int
 
 func main() {
-	data, err := os.Open("test.txt")
+	data, err := os.Open("data.txt")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -46,17 +46,23 @@ func main() {
 						grid[x][y] = 1
 					}
 				case "on":
+					if grid[x][y] == 0 {
+						lightsLit++
+					}
 					grid[x][y] = 1
-					lightsLit++
 				case "off":
+					if grid[x][y] == 1 {
+						lightsLit--
+					}
 					grid[x][y] = 0
-					lightsLit--
 				}
 			}
 		}
 	}
-	outputGrid()
+	//outputGrid()
 	fmt.Printf("Lights Lit: %d\n", lightsLit)
+	check := totalLightsLit()
+	fmt.Printf("Lights Lit Check: %d\n", check)
 }
 
 func commandParser(line string) Operation {
@@ -105,14 +111,28 @@ func outputGrid() {
 		outputString := ""
 		for x := 0; x < xLen; x++ {
 			if x == xLen-1 {
-				outputString += fmt.Sprintf("\t%d\n", grid[x][y])
+				outputString += fmt.Sprintf("\t%d (%d,%d)\n", grid[x][y], x, y)
 			} else if x != 0 {
-				outputString += fmt.Sprintf("\t%d", grid[x][y])
+				outputString += fmt.Sprintf("\t%d (%d,%d)", grid[x][y], x, y)
 			} else {
-				outputString += fmt.Sprintf("%d", grid[x][y])
+				outputString += fmt.Sprintf("%d (%d,%d)", grid[x][y], x, y)
 			}
 		}
 		writer.WriteString(outputString)
 	}
 	writer.Flush()
+}
+
+func totalLightsLit() int {
+	lights := 0
+	xLen := len(grid)
+	yLen := len(grid[0])
+	for x := 0; x < xLen; x++ {
+		for y := 0; y < yLen; y++ {
+			if grid[x][y] == 1 {
+				lights++
+			}
+		}
+	}
+	return lights
 }
