@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -15,15 +16,12 @@ func main() {
 	defer data.Close()
 	buffer := bufio.NewScanner(data)
 
+	caloriesPerElf := make([]int, 0)
 	currentSum := 0
-	maxSum := 0
 	for buffer.Scan() {
 		input := buffer.Text()
 		if input == "" {
-			if currentSum > maxSum {
-				maxSum = currentSum
-				fmt.Printf("New Leader!\n")
-			}
+			caloriesPerElf = append(caloriesPerElf, currentSum)
 			currentSum = 0
 		} else {
 			val, err := strconv.Atoi(input)
@@ -35,9 +33,13 @@ func main() {
 	}
 
 	// Account for end of the input being the max
-	if currentSum > maxSum {
-		maxSum = currentSum
-	}
+	caloriesPerElf = append(caloriesPerElf, currentSum)
 
-	fmt.Printf("Max Sum: %d\n", maxSum)
+	sort.Ints(caloriesPerElf)
+	sl := len(caloriesPerElf)
+
+	p2Answer := caloriesPerElf[sl-1] + caloriesPerElf[sl-2] + caloriesPerElf[sl-3]
+
+	fmt.Printf("P1 Answer: %d\n", caloriesPerElf[sl-1])
+	fmt.Printf("P2 Answer: %d\n", p2Answer)
 }
