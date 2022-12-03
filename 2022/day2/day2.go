@@ -35,13 +35,16 @@ func main() {
 
 	scanner := bufio.NewScanner(data)
 
-	total := 0
+	p1Total := 0
+	p2Total := 0
 
 	for scanner.Scan() {
 		roundInput := strings.Split(scanner.Text(), " ")
-		total += Round(HandToShape[roundInput[0]], HandToShape[roundInput[1]])
+		p1Total += Round(HandToShape[roundInput[0]], HandToShape[roundInput[1]])
+		p2Total += P2Round(HandToShape[roundInput[0]], roundInput[1])
 	}
-	fmt.Printf("Total: %d\n", total)
+	fmt.Printf("Total: %d\n", p1Total)
+	fmt.Printf("P2 Total: %d\n", p2Total)
 }
 
 func Round(opponentHand string, ourHand string) int {
@@ -57,4 +60,46 @@ func Round(opponentHand string, ourHand string) int {
 		roundScore += drawPoints
 	}
 	return roundScore
+}
+
+func P2Round(opponentHand string, neededOutcome string) int {
+	var roundScore int
+	switch neededOutcome {
+	case "X":
+		// Loose
+		roundScore = lossPoints + shapeScores[GetLoosingPlay(opponentHand)]
+	case "Z":
+		// Win
+		roundScore = winPoints + shapeScores[GetWiningPlay(opponentHand)]
+	default:
+		// Draw
+		roundScore = drawPoints + shapeScores[opponentHand]
+	}
+	return roundScore
+}
+
+func GetLoosingPlay(play string) string {
+	var hand string
+	switch play {
+	case "R":
+		hand = "S"
+	case "P":
+		hand = "R"
+	case "S":
+		hand = "P"
+	}
+	return hand
+}
+
+func GetWiningPlay(play string) string {
+	var hand string
+	switch play {
+	case "R":
+		hand = "P"
+	case "P":
+		hand = "S"
+	case "S":
+		hand = "R"
+	}
+	return hand
 }
