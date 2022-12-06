@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestAssignmentContains(t *testing.T) {
+func TestAssignment_Contains(t *testing.T) {
 	var tests = []struct {
 		assignment1 Assignment
 		assignment2 Assignment
@@ -56,6 +56,35 @@ func TestParseInput(t *testing.T) {
 			ans := ParseInput(test.input)
 			if ans[0].start != test.assignment1.start || ans[0].end != test.assignment1.end || ans[1].start != test.assignment2.start || ans[1].end != test.assignment2.end {
 				t.Errorf("got %v, %v, want %v, %v", ans[0], ans[1], test.assignment1, test.assignment2)
+			}
+		})
+	}
+}
+
+func TestAssignment_Overlaps(t *testing.T) {
+	var tests = []struct {
+		assignment1 Assignment
+		assignment2 Assignment
+		result bool
+	} {
+		{assignment1: Assignment{start: 1, end: 3}, assignment2: Assignment{start: 2, end: 3}, result: true},
+		{assignment1: Assignment{start: 6, end: 9}, assignment2: Assignment{start: 1, end: 7}, result: true},
+		{assignment1: Assignment{start: 10, end: 11}, assignment2: Assignment{start: 9, end: 22}, result: true},
+		{assignment1: Assignment{start: 11, end: 13}, assignment2: Assignment{start: 10, end: 12}, result: true},
+		{assignment1: Assignment{start: 30, end: 39}, assignment2: Assignment{start: 20, end: 29}, result: false},
+		{assignment1: Assignment{start: 79, end: 70}, assignment2: Assignment{start: 89, end: 80}, result: false},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v, %v", test.assignment1, test.assignment2), func(t *testing.T) {
+			ans := false
+
+			if test.assignment1.Overlaps(test.assignment2) || test.assignment2.Overlaps(test.assignment1) {
+				ans = true
+			}
+
+			if ans != test.result {
+				t.Errorf("got %t, want %t", ans, test.result)
 			}
 		})
 	}
