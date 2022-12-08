@@ -30,7 +30,7 @@ func (c Cargo) MovePos(count int, from int, to int) error {
 		c.columns[to].boxes = append(c.columns[to].boxes, items[i])
 	}
 	c.columns[from].boxes = c.columns[from].boxes[0 : length-count]
-	//log.Printf("Items: %v\n", items)
+	// log.Printf("Items: %v\n", items)
 	//log.Printf("[End] From: %v || To: %v\n", c.columns[from], c.columns[to])
 	return nil
 }
@@ -76,7 +76,7 @@ func main() {
 			},
 		},
 	}
-	data, err := os.Open("test.txt")
+	data, err := os.Open("data.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -91,9 +91,10 @@ func main() {
 		from, _ := strconv.Atoi(commands[0][2])
 		to, _ := strconv.Atoi(commands[0][3])
 
+		// log.Printf("MoveCount: %d, From: %d, To: %d\n", count, from, to)
+
 		cargo.MovePos(count, from, to)
 
-		//fmt.Printf("Command: %s || Parsed => Count: %d, From: %d, To: %d\n", scanner.Text(), count, from, to)
 	}
 	fmt.Printf("Top Containers: %s\n", cargo.GetTopCrates())
 }
