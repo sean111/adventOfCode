@@ -52,7 +52,7 @@ func TestCargo_MovePos(t *testing.T) {
 			count:  3,
 			from:   1,
 			to:     3,
-			result: "MCPDNZ",
+			result: "MCPZND",
 		},
 	}
 
@@ -71,7 +71,7 @@ func TestCargo_MovePos(t *testing.T) {
 
 func TestCargo_GetTopCrates(t *testing.T) {
 	cargo := TestMap
-	want := "NDP"
+	want := "CD"
 	ans := cargo.GetTopCrates()
 
 	if ans != want {

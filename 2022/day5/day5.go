@@ -26,9 +26,10 @@ func (c Cargo) MovePos(count int, from int, to int) error {
 		return fmt.Errorf("count is longer then the length [%d, %d]", count, length)
 	}
 	items := c.columns[from].boxes[length-count : length]
-	for i := len(items) - 1; i >= 0; i-- {
-		c.columns[to].boxes = append(c.columns[to].boxes, items[i])
-	}
+	//for i := len(items) - 1; i >= 0; i-- {
+	//	c.columns[to].boxes = append(c.columns[to].boxes, items[i])
+	//}
+	c.columns[to].boxes = append(c.columns[to].boxes, items...)
 	c.columns[from].boxes = c.columns[from].boxes[0 : length-count]
 	// log.Printf("Items: %v\n", items)
 	//log.Printf("[End] From: %v || To: %v\n", c.columns[from], c.columns[to])
@@ -38,7 +39,9 @@ func (c Cargo) MovePos(count int, from int, to int) error {
 func (c Cargo) GetTopCrates() string {
 	var output string
 	for _, column := range c.columns {
-		output = fmt.Sprintf("%s%s", output, column.boxes[len(column.boxes)-1])
+		if len(column.boxes) > 0 {
+			output = fmt.Sprintf("%s%s", output, column.boxes[len(column.boxes)-1])
+		}
 	}
 	return output
 }
@@ -91,7 +94,7 @@ func main() {
 		from, _ := strconv.Atoi(commands[0][2])
 		to, _ := strconv.Atoi(commands[0][3])
 
-		// log.Printf("MoveCount: %d, From: %d, To: %d\n", count, from, to)
+		//log.Printf("MoveCount: %d, From: %d, To: %d\n", count, from, to)
 
 		cargo.MovePos(count, from, to)
 
