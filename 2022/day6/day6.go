@@ -11,18 +11,21 @@ func main() {
 		panic(err)
 	}
 	// I don't feel like messing with []byte
-	result := FindSignal(string(data))
+	input := string(data)
+	result := FindSignal(input, 4)
+	result2 := FindSignal(input, 14)
 
-	fmt.Printf("Character: %d\n", result)
+	fmt.Printf("Character Pos: %d\n", result)
+	fmt.Printf("P2 Character Pos: %d", result2)
 }
 
-func FindSignal(input string) int {
+func FindSignal(input string, count int) int {
 	//log.Printf("Input: %s\n", input)
 	chars := []rune(input)
 	//log.Printf("Chars: %v\n", chars)
 	charLen := len(chars)
-	for i := 4; i < charLen; i++ {
-		test := chars[i-4 : i]
+	for i := count; i < charLen; i++ {
+		test := chars[i-count : i]
 		//log.Printf("Test: %v\n", test)
 		if !DupesFound(test) {
 			return i
