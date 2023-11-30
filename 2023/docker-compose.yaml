@@ -1,0 +1,7 @@
+version: "3.3"
+services:
+  aoc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aoc-2023

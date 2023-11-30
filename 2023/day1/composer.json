@@ -1,0 +1,11 @@
+{
+    "name": "aoc2023/day1",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Sean Burke",
+            "email": "sean111@gmail.com"
+        }
+    ],
+    "require": {}
+}
