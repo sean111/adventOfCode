@@ -7,5 +7,17 @@
             "email": "sean111@gmail.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "AoC\\": "src"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.26"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }

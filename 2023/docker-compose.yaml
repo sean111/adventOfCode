@@ -5,3 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: aoc-2023
+    tty: true
+    volumes:
+      - .:/code
