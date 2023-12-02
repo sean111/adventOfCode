@@ -1,6 +1,6 @@
 <?php
 
-namespace AoC;
+namespace AoC\Y2023;
 
 class Day1 {
     /**

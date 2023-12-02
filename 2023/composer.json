@@ -1,0 +1,23 @@
+{
+  "name": "aoc/2023",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Sean Burke",
+      "email": "sean111@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "AoC\\Y2023\\": "src"
+    }
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.26"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
