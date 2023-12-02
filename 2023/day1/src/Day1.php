@@ -3,12 +3,20 @@
 namespace AoC;
 
 class Day1 {
+    /**
+     * @param string $file
+     * @throws \Exception
+     */
     function __construct(private string $file) {
         if (!file_exists($this->file)) {
             throw new \Exception("file not found");
         }
     }
-    
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
     public function sum(): int {
         $total = 0;
         $fp = fopen($this->file, 'r');
@@ -22,7 +30,12 @@ class Day1 {
         fclose($fp);
         return $total;
     }
-    
+
+    /**
+     * @param array $line
+     * @return int
+     * @throws \Exception
+     */
     private function parseLine(array $line): int {
 //        $tmp = $this->getFirstInt($line) . $this->getLastInt($line);
         if (!$first = $this->getFirstInt($line)) {
@@ -36,7 +49,11 @@ class Day1 {
 //        var_dump(['line'=> $line,'first' =>$first, 'last' =>$last, 'tmp' => $tmp, 'int' => (int)$tmp]);
         return (int)$tmp;
     }
-    
+
+    /**
+     * @param array $line
+     * @return string|false
+     */
     private function getFirstInt(array $line): string|false {
         for ($x = 0, $cnt = count($line); $x < $cnt; $x++) {
             if (is_numeric($line[$x])) {
@@ -88,7 +105,11 @@ class Day1 {
         }
         return false;
     }
-    
+
+    /**
+     * @param array $line
+     * @return string|false
+     */
     private function getLastInt(array $line): string|false {
         for ($x = (count($line) - 1); $x >= 0; $x--) {
             if (is_numeric($line[$x])) {
