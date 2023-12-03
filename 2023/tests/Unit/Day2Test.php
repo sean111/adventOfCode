@@ -6,7 +6,7 @@ test('day2', function () {
 
     $fp = fopen($file, 'r');
 
-    $day2 = new Day2(12, 13, 14);
+    $day2 = new Day2;
 
     while(!feof($fp)) {
         $input = fgets($fp);
@@ -14,6 +14,6 @@ test('day2', function () {
     }
 
     $result = $day2->getSum();
-    expect($result)->toBe(8);
+    expect($result)->toBe(2286);
 });
 
