@@ -1,0 +1,10 @@
+alias t:=test
+alias d:=day
+
+default: test
+
+test:
+    ./vendor/bin/pest
+
+day number:
+    php day{{number}}.php
