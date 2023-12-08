@@ -1,7 +1,7 @@
 <?php
 use AoC\Y2023\Day2;
 
-test('day2', function () {
+test('day 2', function () {
     $file = __DIR__ . '/../data/day2.txt';
 
     $fp = fopen($file, 'r');
