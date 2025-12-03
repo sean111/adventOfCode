@@ -47,25 +47,44 @@ fn start(file: []const u8) !u32 {
 }
 
 fn turnLeft(moves: i32, dial: *Dial) void {
-    // std.debug.print("L => Current: {any}, Moves: {any}\n", .{dial.current, moves});
+    std.debug.print("L => Current: {any}, Moves: {any}\n", .{dial.current, moves});
+    var temp: u32 = 0;
+    if (dial.current != 0) {
+        temp = @abs(@divFloor((dial.current - moves), dial.range));
+    }
+    std.debug.print("\tTemp: {any}\n", .{temp});
+    if (temp > 0) {
+        dial.counter+=temp;
+    }
+
+
     dial.current = dial.min + @mod(dial.current - dial.min - moves, dial.range);
-    // std.debug.print("\tNew Current: {any}\n", .{dial.current});
+    std.debug.print("\tNew Current: {any}\n", .{dial.current});
     if (dial.current == 0) {
+        std.debug.print("\tLanded on 0\n", .{});
         dial.counter+=1;
     }
+    std.debug.print("\t\tCurrent counter: {d}\n", .{dial.counter});
 }
 
 fn turnRight(moves: i32, dial: *Dial) void {
-    // std.debug.print("R => Current: {any}, Moves: {any}\n", .{dial.current, moves});
+    std.debug.print("R => Current: {any}, Moves: {any}\n", .{dial.current, moves});
+    const temp = @abs(@divFloor((dial.current + moves - 1), dial.range));
+    std.debug.print("\tTemp: {any}\n", .{temp});
+    if (temp > 0) {
+        dial.counter+=temp;
+    }
+
     dial.current = dial.min + @mod(dial.current - dial.min + moves, dial.range);
-    // std.debug.print("\tNew Current: {any}\n", .{dial.current});
+    std.debug.print("\tNew Current: {any}\n", .{dial.current});
     if (dial.current == 0) {
         dial.counter+=1;
     }
+    std.debug.print("\t\tCurrent counter: {d}\n", .{dial.counter});
 }
 
 test "check that the example data passes" {
     const result = try start("data/test.txt");
-    try std.testing.expectEqual(@as(u32, 3), result);
+    try std.testing.expectEqual(@as(u32, 6), result);
 }
 
