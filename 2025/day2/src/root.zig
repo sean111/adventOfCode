@@ -14,8 +14,42 @@ pub fn checkNumber(input: []const u8) bool {
         const split = (strLen / 2);
         const first = input[0..split];
         const second = input[split..];
-        std.debug.print("\tCheck: {s} | {s}\n", .{first, second});
         return !std.mem.eql(u8, first, second);
+    }
+    return true;
+}
+
+pub fn checkNumber2(input: []const u8) bool {
+    const length = input.len;
+    if (length < 2) {
+        return true;
+    }
+
+    var tmpLen: usize = 1;
+
+    while (tmpLen <= length / 2) : (tmpLen += 1) {
+
+        if (length % tmpLen != 0) {
+            continue;
+        }
+
+        const pattern = input[0..tmpLen];
+        var isRepeating = true;
+
+        var incr: usize = tmpLen;
+
+        while (incr < length): (incr += tmpLen) {
+            if (!std.mem.eql(u8, input[incr .. incr + tmpLen], pattern)) {
+                isRepeating = false;
+                break;
+            }
+
+        }
+
+        if (isRepeating) {
+            return false;
+        }
+
     }
     return true;
 }
